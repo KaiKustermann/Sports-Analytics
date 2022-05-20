@@ -69,7 +69,7 @@ def write_landmarks_to_json(folder_path, mp4_file_name):
 
   cap.release()
 
-  landmark_df.to_csv("./landmark_results/" + mp4_file_name + ".csv")
+  landmark_df.to_json("./landmark_results/" + mp4_file_name + ".json")
 
 
 write_landmarks_to_json("assets", "Gehen-6,5-seite")
