@@ -10,7 +10,7 @@ points = mp_pose.PoseLandmark # Landmarks
 
 
 #vor der kombination die werte korrigieren (ausreißer mithilfe graph)!!!!!!!!!!!!!!!!!!!!
-#landmarks y werte auf eine höhe bringen und dann mit video  seite und hinten kombinieren (durchschnitt der landmarks)
+#landmarks y werte auf eine höhe bringen und dann mit video seite und hinten kombinieren (durchschnitt der landmarks)
 
 def write_landmarks_to_json(folder_path, mp4_file_name):
   cap = cv2.VideoCapture(folder_path + "/" + mp4_file_name + ".mp4")
@@ -69,7 +69,7 @@ def write_landmarks_to_json(folder_path, mp4_file_name):
 
   cap.release()
 
-  landmark_df.to_json("./landmark_results/" + mp4_file_name + ".json")
+  landmark_df.to_csv("./landmark_results/" + mp4_file_name + ".csv")
 
 
 write_landmarks_to_json("assets", "Gehen-6,5-seite")
