@@ -69,6 +69,8 @@ def write_landmarks_to_json(folder_path, mp4_file_name):
 
   cap.release()
 
+  #slice from the first column that we need (from hip onwards)
+  landmark_df = landmark_df.loc[:, 'LEFT_HIP_x':]
   landmark_df.to_json("./landmark_results/" + mp4_file_name + ".json")
 
 
