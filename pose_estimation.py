@@ -74,4 +74,4 @@ def write_landmarks_to_json(folder_path, mp4_file_name):
   landmark_df.to_json("./landmark_results/" + mp4_file_name + ".json")
 
 
-write_landmarks_to_json("assets", "Gehen-6,5-seite")
+write_landmarks_to_json("assets", "Gehen-6,5-seite_cut")
