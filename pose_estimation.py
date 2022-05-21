@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 import pandas as pd
+import os
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -12,7 +13,7 @@ points = mp_pose.PoseLandmark # Landmarks
 #vor der kombination die werte korrigieren (ausreißer mithilfe graph)!!!!!!!!!!!!!!!!!!!!
 #landmarks y werte auf eine höhe bringen und dann mit video seite und hinten kombinieren (durchschnitt der landmarks)
 
-def write_landmarks_to_json(folder_path, mp4_file_name):
+def write_landmarks_to_csv(folder_path, mp4_file_name):
   cap = cv2.VideoCapture(folder_path + "/" + mp4_file_name + ".mp4")
   count = 0
 
@@ -71,7 +72,18 @@ def write_landmarks_to_json(folder_path, mp4_file_name):
 
   #slice from the first column that we need (from hip onwards)
   landmark_df = landmark_df.loc[:, 'LEFT_HIP_x':]
-  landmark_df.to_json("./landmark_results/" + mp4_file_name + ".json")
+  landmark_df.to_csv("./landmark_results/" + mp4_file_name + ".csv")
 
 
-write_landmarks_to_json("assets", "Gehen-6,5-seite_cut")
+directory_in_str = "J:/Kai Kustermann/HDM/Semester 7/Sports Analytics/mp4_1/mp4_1/"
+directory = os.fsencode(directory_in_str)
+
+for file in os.listdir(directory):
+    filename = os.fsdecode(file)
+    filename = filename[:-4]
+    if (filename.endswith("_cut") and filename.startswith("converted")): 
+        write_landmarks_to_csv(directory_in_str, filename)
+        continue
+    else:
+        continue
+

@@ -51,7 +51,7 @@ def extract_subclip_from_video(directory: str, mp4_file_name: str):
         print("The file does not exist")
 
 
-directory_in_str = "J:/Kai Kustermann/HDM/Semester 7/Sports Analytics/mp4_1/mp4_1/"
+directory_in_str = "J:/Kai Kustermann/HDM/Semester 7/Sports Analytics/mp4_2/mp4_2/"
 directory = os.fsencode(directory_in_str)
 
 for file in os.listdir(directory):
