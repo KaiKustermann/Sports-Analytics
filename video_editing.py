@@ -56,7 +56,7 @@ def extract_subclips_from_videos(directory_str):
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
         filename_edited = filename[:-4]
-        if filename.endswith(".mp4"):
+        if filename.endswith(".mp4") and filename.startswith("converted_"):
             extract_subclip_from_video(directory_in_str, filename_edited)
             continue
         else:
