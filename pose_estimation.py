@@ -64,15 +64,16 @@ def write_landmarks_to_csv(folder_path, mp4_file_name):
   landmark_df.to_csv("./landmark_results/" + mp4_file_name + ".csv")
 
 
-directory_in_str = "J:/Kai Kustermann/HDM/Semester 7/Sports Analytics/mp4_1/mp4_1/"
-directory = os.fsencode(directory_in_str)
+def save_landmarks_of_videos(directory_str):
+  directory_in_str = directory_str
+  directory = os.fsencode(directory_in_str)
 
-for file in os.listdir(directory):
-    filename = os.fsdecode(file)
-    filename = filename[:-4]
-    if (filename.endswith("_cut") and filename.startswith("converted")): 
-        write_landmarks_to_csv(directory_in_str, filename)
-        continue
-    else:
-        continue
+  for file in os.listdir(directory):
+      filename = os.fsdecode(file)
+      filename = filename[:-4]
+      if (filename.endswith("_cut")): 
+          write_landmarks_to_csv(directory_in_str, filename)
+          continue
+      else:
+          continue
 
