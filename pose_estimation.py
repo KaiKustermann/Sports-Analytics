@@ -69,7 +69,7 @@ def save_landmarks_of_videos(directory_str):
   for file in os.listdir(directory):
       filename = os.fsdecode(file)
       filename = filename[:-4]
-      if (filename.endswith("_cut")): 
+      if (filename.endswith("_cut") and filename.startswith("converted")): 
           write_landmarks_to_csv(directory_in_str, filename)
           continue
       else:
