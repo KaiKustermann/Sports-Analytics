@@ -17,8 +17,6 @@ def combine_angles(landmark_back_df, landmark_site_df, filename):
     return landmark_combined_df
 
 
-
-
 def combine_back_and_side_results(directory_str):
     directory_in_str = directory_str
     directory = os.fsencode(directory_in_str)
