@@ -19,7 +19,7 @@ save_landmarks_of_videos("J:/Kai Kustermann/HDM/Semester 7/Sports Analytics/mp4_
 
 
 # combine the results of back and side by adjusting the y coordinate and taking the mean of the two results
-combine_back_and_side_results("J:\Kai Kustermann\HDM\Semester 7\Big Data\Videoediting and Modelbuilding\landmark_results")
+combine_back_and_side_results("./landmark_results")
 
 
 
