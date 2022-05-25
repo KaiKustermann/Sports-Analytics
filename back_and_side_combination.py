@@ -48,4 +48,3 @@ def combine_back_and_side_results(directory_str):
         else:
             continue
 
-combine_back_and_side_results("./landmark_results")
