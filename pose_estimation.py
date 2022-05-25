@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 import pandas as pd
+import os
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -12,7 +13,7 @@ points = mp_pose.PoseLandmark # Landmarks
 #vor der kombination die werte korrigieren (ausreißer mithilfe graph)!!!!!!!!!!!!!!!!!!!!
 #landmarks y werte auf eine höhe bringen und dann mit video seite und hinten kombinieren (durchschnitt der landmarks)
 
-def write_landmarks_to_json(folder_path, mp4_file_name):
+def write_landmarks_to_csv(folder_path, mp4_file_name):
   cap = cv2.VideoCapture(folder_path + "/" + mp4_file_name + ".mp4")
   count = 0
 
@@ -51,17 +52,6 @@ def write_landmarks_to_json(folder_path, mp4_file_name):
 
       if count == 1:
         print(landmark_df)
-
-      ## Draw the pose annotation on the image.
-      # image.flags.writeable = True
-      # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-      # mp_drawing.draw_landmarks(
-      #     image,
-      #     results.pose_landmarks,
-      #     mp_pose.POSE_CONNECTIONS,
-      #     landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
-
-      # cv2.imshow('MediaPipe Pose', image)
       
       count = count + 1
       if cv2.waitKey(5) & 0xFF == 27:
@@ -71,7 +61,19 @@ def write_landmarks_to_json(folder_path, mp4_file_name):
 
   #slice from the first column that we need (from hip onwards)
   landmark_df = landmark_df.loc[:, 'LEFT_HIP_x':]
-  landmark_df.to_json("./landmark_results/" + mp4_file_name + ".json")
+  landmark_df.to_csv("./landmark_results/" + mp4_file_name + ".csv")
 
 
-write_landmarks_to_json("assets", "Gehen-6,5-seite_cut")
+def save_landmarks_of_videos(directory_str):
+  directory_in_str = directory_str
+  directory = os.fsencode(directory_in_str)
+
+  for file in os.listdir(directory):
+      filename = os.fsdecode(file)
+      filename = filename[:-4]
+      if (filename.endswith("_cut")): 
+          write_landmarks_to_csv(directory_in_str, filename)
+          continue
+      else:
+          continue
+
