@@ -9,10 +9,7 @@ mp_pose = mp.solutions.pose
 pose = mp_pose.Pose()
 points = mp_pose.PoseLandmark # Landmarks
 
-
-#vor der kombination die werte korrigieren (ausreißer mithilfe graph)!!!!!!!!!!!!!!!!!!!!
-#landmarks y werte auf eine höhe bringen und dann mit video seite und hinten kombinieren (durchschnitt der landmarks)
-
+#saves the landmarks of one video to csv
 def write_landmarks_to_csv(folder_path, mp4_file_name):
   cap = cv2.VideoCapture(folder_path + "/" + mp4_file_name + ".mp4")
   count = 0
@@ -64,6 +61,7 @@ def write_landmarks_to_csv(folder_path, mp4_file_name):
   landmark_df.to_csv("./landmark_results/" + mp4_file_name + ".csv")
 
 
+#saves the landmarks of all videos in the given directory to csv
 def save_landmarks_of_videos(directory_str):
   directory_in_str = directory_str
   directory = os.fsencode(directory_in_str)
