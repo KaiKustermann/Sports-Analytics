@@ -8,6 +8,7 @@ files = []
 for file in glob.glob("./landmark_results_combined/*.csv"):
     files.append(file)
 
+# Funktion, um Z-Werte einzuordnen. Rückgabewert 0 für keine Anomalie, 1 für Anomalie
 def check_anomalien(z):
     # print(z)
     if z < 3:
@@ -16,14 +17,14 @@ def check_anomalien(z):
     else:
         return 1
 
-# Erstellen einer neuen CSV-Datei
-
+# Schleife: Erstellen einer neuen CSV-Datei mit evaluierten Keypoints: Enthält Keypoints und Anomalieprüfung
 for i in files:
+
     # Einlesen der Datei in Dataframe
     df = pd.read_csv(i)
     df = df.iloc[:, 1:]
-    # Finden des absoluten Werts des Z-Werts für jede Beobachtung
 
+    # Finden des absoluten Werts des Z-Werts für jedes Feature
     df["z_lefthipx"] = np.abs(stats.zscore(df["LEFT_HIP_x_back"]))
     df["z_lefthipy"] = np.abs(stats.zscore(df["LEFT_HIP_y_combined"]))
     df["z_lefthipz"] = np.abs(stats.zscore(df["LEFT_HIP_x_site"]))
@@ -105,20 +106,18 @@ for i in files:
     df['a_rightfootindexy'] = df['z_rightfootindexy'].apply(check_anomalien)
     df['a_rightfootindexz'] = df['z_rightfootindexz'].apply(check_anomalien)
 
-
+    # Entfernen aller Z-Werte, optional
     z_columns = ['z_lefthipx', 'z_lefthipy', 'z_lefthipz', 'z_righthipx', 'z_righthipy', 'z_righthipz',
                  'z_leftkneex', 'z_leftkneey', 'z_leftkneez', 'z_rightkneex', 'z_rightkneey', 'z_rightkneez',
                  'z_leftanklex', 'z_leftankley', 'z_leftanklez', 'z_rightanklex', 'z_rightankley', 'z_rightanklez',
                  'z_leftheelx', 'z_leftheely', 'z_leftheelz', 'z_rightheelx', 'z_rightheely', 'z_rightheelz',
                  'z_leftfootindexx', 'z_leftfootindexy', 'z_leftfootindexz', 'z_rightfootindexx', 'z_rightfootindexy',
                  'z_rightfootindexz']
-    right_df = df.drop(z_columns, axis=1)
+    df_anomalien = df.drop(z_columns, axis=1)
 
-
-    #print(right_df)
-
-
+    # Pfad der csv-Datei aufsplitten, benötigt für Speichern neuer Datei
     x = i.split("/")
 
-    right_df.to_csv("model_evaluation/evaluated_keypoints/" + "evaluated_" + x[2], index=False)
+    # Je csv-Datei erstellen einer neuen csv-Datei mit Evaluationswerten in Ordner evaluated_keypoints
+    df_anomalien.to_csv("model_evaluation/evaluated_keypoints/" + "evaluated_" + x[2], index=False)
 
