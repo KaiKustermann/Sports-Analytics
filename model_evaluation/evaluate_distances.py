@@ -3,57 +3,56 @@ import pandas as pd
 import scipy.stats as stats
 import glob
 
-# Alle Datei-Namen (.csv) in eine Liste laden
+# Alle Datei-Namen (.csv) aus Ordner distances in eine Liste laden
 files = []
 for file in glob.glob("model_evaluation/distances/*.csv"):
     files.append(file)
 
+# Funktion, um Z-Werte einzuordnen. Rückgabewert 0 für keine Anomalie, 1 für Anomalie
 def check_anomalien(z):
-    # print(z)
     if z < 3:
         return 0
 
     else:
         return 1
 
-# Erstellen einer neuen CSV-Datei mit Distanzen für jede CSV-Datei mit Keypoints
-
+# Schleife: Erstellen einer neuen CSV-Datei mit evaluierten Distanzen: Enthält Distanzen und Anomalieprüfung
 for i in files:
+
     # Einlesen der Datei in Dataframe
     df = pd.read_csv(i)
 
-    # Finden des absoluten Werts des Z-Werts für jede Beobachtung
-    z = np.abs(stats.zscore(df))
-    # print(z)
-    df["Z-Wert Hips"] = z.iloc[:, :1]
+    # Berechnungen Z-Werte pro Feature/Distanz und speichern in neues Column
+    df["z_hips"] = np.abs(stats.zscore(df["distance_hips"]))
 
-    df["Z-Wert LKHi"] = z.iloc[:, 1:2]
-    df["Z-Wert RKHi"] = z.iloc[:, 2:3]
+    df["z_leftkneehip"] = np.abs(stats.zscore(df["distance_leftkneehip"]))
+    df["z_rightkneehip"] = np.abs(stats.zscore(df["distance_rightkneehip"]))
 
-    df["Z-Wert LKHe"] = z.iloc[:, 3:4]
-    df["Z-Wert RKHe"] = z.iloc[:, 4:5]
+    df["z_leftkneeheel"] = np.abs(stats.zscore(df["distance_leftkneeheel"]))
+    df["z_rightkneeheel"] = np.abs(stats.zscore(df["distance_rightkneeheel"]))
 
-    df["Z-Wert LHI"] = z.iloc[:, 5:6]
-    df["Z-Wert RHI"] = z.iloc[:, 6:7]
-
-    df['distance_hips_anomalien'] = df['Z-Wert Hips'].apply(check_anomalien)
-
-    df['distance_leftkneehips_anomalien'] = df['Z-Wert LKHi'].apply(check_anomalien)
-    df['distance_rightkneehips_anomalien'] = df['Z-Wert RKHi'].apply(check_anomalien)
-
-    df['distance_leftkneeheel_anomalien'] = df['Z-Wert LKHe'].apply(check_anomalien)
-    df['distance_rightkneeheel_anomalien'] = df['Z-Wert RKHe'].apply(check_anomalien)
-
-    df['distance_leftheelindex_anomalien'] = df['Z-Wert LHI'].apply(check_anomalien)
-
-    df['distance_rightheelindex_anomalien'] = df['Z-Wert RHI'].apply(check_anomalien)
-
-    right_df = df.drop(["Z-Wert Hips", "Z-Wert LKHi","Z-Wert RKHi", "Z-Wert LKHe","Z-Wert RKHe", "Z-Wert LHI", "Z-Wert RHI"], axis=1)
+    df["z_leftheelindex"] = np.abs(stats.zscore(df["distance_leftheelindex"]))
+    df["z_rightheelindex"] = np.abs(stats.zscore(df["distance_rightheelindex"]))
 
 
-    #print(right_df)
+    # Anwenden der Funktion check_anomalien auf jedes Column der Z-Werte und speichern der Rückgabewerte in neues Column
+    df['distance_hips_anomalien'] = df['z_hips'].apply(check_anomalien)
 
+    df['distance_leftkneehips_anomalien'] = df['z_leftkneehip'].apply(check_anomalien)
+    df['distance_rightkneehips_anomalien'] = df['z_rightkneehip'].apply(check_anomalien)
 
+    df['distance_leftkneeheel_anomalien'] = df['z_leftkneeheel'].apply(check_anomalien)
+    df['distance_rightkneeheel_anomalien'] = df['z_rightkneeheel'].apply(check_anomalien)
+
+    df['distance_leftheelindex_anomalien'] = df['z_leftheelindex'].apply(check_anomalien)
+
+    df['distance_rightheelindex_anomalien'] = df['z_rightheelindex'].apply(check_anomalien)
+
+    # Entfernen aller Columns mit Z-Werten, optional
+    df_anomalien = df.drop(["z_hips", "z_leftkneehip","z_rightkneehip", "z_leftkneeheel","z_rightkneeheel", "z_leftheelindex", "z_rightheelindex"], axis=1)
+
+    # Pfad der csv-Datei aufsplitten, benötigt für Speichern neuer Datei
     x = i.split("/")
 
-    right_df.to_csv("model_evaluation/evaluated_distances/" + "evaluated_" + x[2], index=False)
+    # Je csv-Datei erstellen einer neuen csv-Datei mit Evaluationswerten in Ordner evaluated_distances
+    df_anomalien.to_csv("model_evaluation/evaluated_distances/" + "evaluated_" + x[2], index=False)
