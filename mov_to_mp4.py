@@ -12,3 +12,6 @@ def mov_to_mp4(directory_str: str):
             continue
         else:
             continue
+
+
+mov_to_mp4("./example_assets/")

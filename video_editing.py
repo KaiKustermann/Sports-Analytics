@@ -34,7 +34,6 @@ def extract_subclip_from_video(directory: str, mp4_file_name: str):
     clip.audio.write_audiofile(directory + mp4_file_name + ".wav")
 
     time_max_volume = get_time_of_max_volume(directory + mp4_file_name + ".wav")
-    duration = get_duration(directory + mp4_file_name + ".wav")
 
     if time_max_volume < 15:
         with VideoFileClip(directory + mp4_file_name + ".mp4") as video:
