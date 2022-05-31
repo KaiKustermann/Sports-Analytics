@@ -28,8 +28,14 @@ for i in files:
     df["z_leftkneehip"] = np.abs(stats.zscore(df["distance_leftkneehip"]))
     df["z_rightkneehip"] = np.abs(stats.zscore(df["distance_rightkneehip"]))
 
+    df["z_leftkneeankle"] = np.abs(stats.zscore(df["distance_leftkneeankle"]))
+    df["z_rightkneeankle"] = np.abs(stats.zscore(df["distance_rightkneeankle"]))
+
     df["z_leftkneeheel"] = np.abs(stats.zscore(df["distance_leftkneeheel"]))
     df["z_rightkneeheel"] = np.abs(stats.zscore(df["distance_rightkneeheel"]))
+
+    df["z_leftankleindex"] = np.abs(stats.zscore(df["distance_leftankleindex"]))
+    df["z_rightankleindex"] = np.abs(stats.zscore(df["distance_rightankleindex"]))
 
     df["z_leftheelindex"] = np.abs(stats.zscore(df["distance_leftheelindex"]))
     df["z_rightheelindex"] = np.abs(stats.zscore(df["distance_rightheelindex"]))
@@ -41,15 +47,20 @@ for i in files:
     df['distance_leftkneehips_anomalien'] = df['z_leftkneehip'].apply(check_anomalien)
     df['distance_rightkneehips_anomalien'] = df['z_rightkneehip'].apply(check_anomalien)
 
+    df['distance_leftkneeankle_anomalien'] = df['z_leftkneeankle'].apply(check_anomalien)
+    df['distance_rightkneeankle_anomalien'] = df['z_rightkneeankle'].apply(check_anomalien)
+
     df['distance_leftkneeheel_anomalien'] = df['z_leftkneeheel'].apply(check_anomalien)
     df['distance_rightkneeheel_anomalien'] = df['z_rightkneeheel'].apply(check_anomalien)
 
-    df['distance_leftheelindex_anomalien'] = df['z_leftheelindex'].apply(check_anomalien)
+    df['distance_leftankleindex_anomalien'] = df['z_leftankleindex'].apply(check_anomalien)
+    df['distance_rightankleindex_anomalien'] = df['z_rightankleindex'].apply(check_anomalien)
 
+    df['distance_leftheelindex_anomalien'] = df['z_leftheelindex'].apply(check_anomalien)
     df['distance_rightheelindex_anomalien'] = df['z_rightheelindex'].apply(check_anomalien)
 
     # Entfernen aller Columns mit Z-Werten, optional
-    df_anomalien = df.drop(["z_hips", "z_leftkneehip","z_rightkneehip", "z_leftkneeheel","z_rightkneeheel", "z_leftheelindex", "z_rightheelindex"], axis=1)
+    df_anomalien = df.drop(["z_hips", "z_leftkneehip","z_rightkneehip", "z_leftkneeankle","z_rightkneeankle", "z_leftkneeheel","z_rightkneeheel", "z_leftankleindex", "z_rightankleindex", "z_leftheelindex", "z_rightheelindex"], axis=1)
 
     # Pfad der csv-Datei aufsplitten, benötigt für Speichern neuer Datei
     x = i.split("/")
