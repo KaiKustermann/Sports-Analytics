@@ -7,8 +7,11 @@ def mov_to_mp4(directory_str: str):
 
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
-        if filename.endswith(".MOV"): 
+        if filename.endswith(".mov"): 
             os.system("ffmpeg -i \"{}{}\" \"{}converted_{}\"".format(directory_in_str, filename, directory_in_str, filename[:-4] + ".mp4"))
             continue
         else:
             continue
+
+
+mov_to_mp4("./example_assets/")
