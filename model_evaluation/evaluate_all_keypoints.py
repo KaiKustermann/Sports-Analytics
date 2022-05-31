@@ -17,6 +17,7 @@ def check_anomalien(z):
     else:
         return 1
 
+
 # Schleife: Erstellen einer neuen CSV-Datei mit evaluierten Keypoints: Enthält Keypoints und Anomalieprüfung
 for i in files:
 
@@ -66,58 +67,85 @@ for i in files:
     df["z_rightfootindexz"] = np.abs(stats.zscore(df["RIGHT_FOOT_INDEX_x_site"]))
 
     # Anomalien für jedes Feature überprüfen
-    df['a_lefthipx'] = df['z_lefthipx'].apply(check_anomalien)
-    df['a_lefthipy'] = df['z_lefthipy'].apply(check_anomalien)
-    df['a_lefthipz'] = df['z_lefthipz'].apply(check_anomalien)
+    df["a_lefthipx"] = df["z_lefthipx"].apply(check_anomalien)
+    df["a_lefthipy"] = df["z_lefthipy"].apply(check_anomalien)
+    df["a_lefthipz"] = df["z_lefthipz"].apply(check_anomalien)
 
-    df['a_righthipx'] = df['z_righthipx'].apply(check_anomalien)
-    df['a_righthipy'] = df['z_righthipy'].apply(check_anomalien)
-    df['a_righthipz'] = df['z_righthipz'].apply(check_anomalien)
+    df["a_righthipx"] = df["z_righthipx"].apply(check_anomalien)
+    df["a_righthipy"] = df["z_righthipy"].apply(check_anomalien)
+    df["a_righthipz"] = df["z_righthipz"].apply(check_anomalien)
 
-    df['a_leftkneex'] = df['z_leftkneex'].apply(check_anomalien)
-    df['a_leftkneey'] = df['z_leftkneey'].apply(check_anomalien)
-    df['a_leftkneez'] = df['z_leftkneez'].apply(check_anomalien)
+    df["a_leftkneex"] = df["z_leftkneex"].apply(check_anomalien)
+    df["a_leftkneey"] = df["z_leftkneey"].apply(check_anomalien)
+    df["a_leftkneez"] = df["z_leftkneez"].apply(check_anomalien)
 
-    df['a_rightkneex'] = df['z_rightkneex'].apply(check_anomalien)
-    df['a_rightkneey'] = df['z_rightkneey'].apply(check_anomalien)
-    df['a_rightkneez'] = df['z_rightkneez'].apply(check_anomalien)
+    df["a_rightkneex"] = df["z_rightkneex"].apply(check_anomalien)
+    df["a_rightkneey"] = df["z_rightkneey"].apply(check_anomalien)
+    df["a_rightkneez"] = df["z_rightkneez"].apply(check_anomalien)
 
-    df['a_leftanklex'] = df['z_leftanklex'].apply(check_anomalien)
-    df['a_leftankley'] = df['z_leftankley'].apply(check_anomalien)
-    df['a_leftanklez'] = df['z_leftanklez'].apply(check_anomalien)
+    df["a_leftanklex"] = df["z_leftanklex"].apply(check_anomalien)
+    df["a_leftankley"] = df["z_leftankley"].apply(check_anomalien)
+    df["a_leftanklez"] = df["z_leftanklez"].apply(check_anomalien)
 
-    df['a_rightanklex'] = df['z_rightanklex'].apply(check_anomalien)
-    df['a_rightankley'] = df['z_rightankley'].apply(check_anomalien)
-    df['a_rightanklez'] = df['z_rightanklez'].apply(check_anomalien)
+    df["a_rightanklex"] = df["z_rightanklex"].apply(check_anomalien)
+    df["a_rightankley"] = df["z_rightankley"].apply(check_anomalien)
+    df["a_rightanklez"] = df["z_rightanklez"].apply(check_anomalien)
 
-    df['a_leftheelx'] = df['z_leftheelx'].apply(check_anomalien)
-    df['a_leftheely'] = df['z_leftheely'].apply(check_anomalien)
-    df['a_leftheelz'] = df['z_leftheelz'].apply(check_anomalien)
+    df["a_leftheelx"] = df["z_leftheelx"].apply(check_anomalien)
+    df["a_leftheely"] = df["z_leftheely"].apply(check_anomalien)
+    df["a_leftheelz"] = df["z_leftheelz"].apply(check_anomalien)
 
-    df['a_rightheelx'] = df['z_rightheelx'].apply(check_anomalien)
-    df['a_rightheely'] = df['z_rightheely'].apply(check_anomalien)
-    df['a_rightheelz'] = df['z_rightheelz'].apply(check_anomalien)
+    df["a_rightheelx"] = df["z_rightheelx"].apply(check_anomalien)
+    df["a_rightheely"] = df["z_rightheely"].apply(check_anomalien)
+    df["a_rightheelz"] = df["z_rightheelz"].apply(check_anomalien)
 
-    df['a_leftfootindexx'] = df['z_leftfootindexx'].apply(check_anomalien)
-    df['a_leftfootindexy'] = df['z_leftfootindexy'].apply(check_anomalien)
-    df['a_leftfootindexz'] = df['z_leftfootindexz'].apply(check_anomalien)
+    df["a_leftfootindexx"] = df["z_leftfootindexx"].apply(check_anomalien)
+    df["a_leftfootindexy"] = df["z_leftfootindexy"].apply(check_anomalien)
+    df["a_leftfootindexz"] = df["z_leftfootindexz"].apply(check_anomalien)
 
-    df['a_rightfootindexx'] = df['z_rightfootindexx'].apply(check_anomalien)
-    df['a_rightfootindexy'] = df['z_rightfootindexy'].apply(check_anomalien)
-    df['a_rightfootindexz'] = df['z_rightfootindexz'].apply(check_anomalien)
+    df["a_rightfootindexx"] = df["z_rightfootindexx"].apply(check_anomalien)
+    df["a_rightfootindexy"] = df["z_rightfootindexy"].apply(check_anomalien)
+    df["a_rightfootindexz"] = df["z_rightfootindexz"].apply(check_anomalien)
 
     # Entfernen aller Z-Werte, optional
-    z_columns = ['z_lefthipx', 'z_lefthipy', 'z_lefthipz', 'z_righthipx', 'z_righthipy', 'z_righthipz',
-                 'z_leftkneex', 'z_leftkneey', 'z_leftkneez', 'z_rightkneex', 'z_rightkneey', 'z_rightkneez',
-                 'z_leftanklex', 'z_leftankley', 'z_leftanklez', 'z_rightanklex', 'z_rightankley', 'z_rightanklez',
-                 'z_leftheelx', 'z_leftheely', 'z_leftheelz', 'z_rightheelx', 'z_rightheely', 'z_rightheelz',
-                 'z_leftfootindexx', 'z_leftfootindexy', 'z_leftfootindexz', 'z_rightfootindexx', 'z_rightfootindexy',
-                 'z_rightfootindexz']
+    z_columns = [
+        "z_lefthipx",
+        "z_lefthipy",
+        "z_lefthipz",
+        "z_righthipx",
+        "z_righthipy",
+        "z_righthipz",
+        "z_leftkneex",
+        "z_leftkneey",
+        "z_leftkneez",
+        "z_rightkneex",
+        "z_rightkneey",
+        "z_rightkneez",
+        "z_leftanklex",
+        "z_leftankley",
+        "z_leftanklez",
+        "z_rightanklex",
+        "z_rightankley",
+        "z_rightanklez",
+        "z_leftheelx",
+        "z_leftheely",
+        "z_leftheelz",
+        "z_rightheelx",
+        "z_rightheely",
+        "z_rightheelz",
+        "z_leftfootindexx",
+        "z_leftfootindexy",
+        "z_leftfootindexz",
+        "z_rightfootindexx",
+        "z_rightfootindexy",
+        "z_rightfootindexz",
+    ]
     df_anomalien = df.drop(z_columns, axis=1)
 
     # Pfad der csv-Datei aufsplitten, benötigt für Speichern neuer Datei
     x = i.split("/")
 
     # Je csv-Datei erstellen einer neuen csv-Datei mit Evaluationswerten in Ordner evaluated_keypoints
-    df_anomalien.to_csv("model_evaluation/evaluated_keypoints/" + "evaluated_" + x[2], index=False)
-
+    df_anomalien.to_csv(
+        "model_evaluation/evaluated_keypoints/" + "evaluated_" + x[2], index=False
+    )
