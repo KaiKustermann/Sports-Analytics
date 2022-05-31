@@ -19,3 +19,5 @@ Empfohlene Reihenfolge der auszuführenden Files, wobei 1 vor 2 ausgeführt werd
 2. evaluate_distances.py
 3. evaluate_all_keypoints.py
 4. visualize_evaluation.py
+
+Bitte vom Gesamtordner aus starten, da sonst Pfade nicht gefunden werden können.
