@@ -17,6 +17,9 @@ def combine_angles(landmark_back_df, landmark_site_df):
     for column in landmark_back_df.columns:
         if column[-1:] == "x":
             df_combined[column + "_back"] = landmark_back_df[column]
+    for column in landmark_back_df.columns:
+        if column[-1:] == "y":
+            df_combined[column + "_back"] = landmark_back_df[column]
     for column in landmark_site_df.columns:
         if column[-1:] == "x":
             df_combined[column + "_site"] = landmark_site_df[column]
