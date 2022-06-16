@@ -9,8 +9,38 @@ df = df.iloc[:, 1:]
 print(df)
 
 # Nur Zeilen mit Column Werten unter bestimmten Wert
-low_values = df.loc[df["LEFT_FOOT_INDEX_y_site"] < 0.7]
+low_values = df.loc[df["LEFT_FOOT_INDEX_y_site"] < 0.693]
 print(low_values)
+indexes = low_values.index
+print(type(indexes[1]))
+mittelwert = []
+test_mw = 0
+count = 0
+for i in indexes:
+
+    # Winkle berechnen
+    b = np.array([df.LEFT_ANKLE_x_back[i], df.LEFT_ANKLE_y_back[i]])
+    a = np.array([df.LEFT_KNEE_x_back[i], df.LEFT_KNEE_y_back[i]])
+    c = np.array([df.LEFT_HEEL_x_back[i], df.LEFT_HEEL_y_back[i]])
+
+    ba = a - b
+    bc = c - b
+
+    cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
+    angle = np.arccos(cosine_angle)
+
+    print("Winkel von", i , np.degrees(angle))
+    mittelwert.append(np.degrees(angle))
+    test_mw = test_mw + np.degrees(angle)
+    count = count + 1
+
+print(mittelwert)
+print(test_mw)
+print(count)
+print(test_mw / count)
+
+
+
 
 # Auslesen Mindestwert einer Spalte
 print(df['LEFT_FOOT_INDEX_y_site'].min())
