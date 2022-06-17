@@ -4,23 +4,23 @@ import pandas as pd
 import numpy as np
 import glob
 
-#Einlesen einer csv-Datei
-#df = pd.read_csv("landmark_results_combined_new/4_Gehen_combined.csv")
-#df = df.iloc[:, 1:]
-
 # Funktion um Fußauftritt einzuordnen
-def check_auftritt(x, y):
+def check_auftritt(fussspitze, ferse):
         
-    if x < y:
+    if fussspitze < ferse:
         return "Vorfußlauf"
-    if x > y:
+    if fussspitze > ferse:
         return "Fersenlauf"
     else:
         return "Mittelfußlauf"
 
+# Alle csv-Dateien aus Ordner in Liste speichern
 files = []
 for file in glob.glob("landmark_results_combined_new/*.csv"):
     files.append(file)
+
+# Leerer Dataframe für Output
+dfresults = pd.DataFrame(columns=['filename', 'klasse'])
 
 for x in files:
 
@@ -49,6 +49,18 @@ for x in files:
         #dfObj = dfObj.append({'old_index': i,'LEFT_FOOT_INDEX_y_site': df["LEFT_FOOT_INDEX_y_site"][i], 'LEFT_HEEL_y_site': df['LEFT_HEEL_y_site'][i]}, ignore_index=True)
         dfObj = pd.concat([dfObj, pd.DataFrame.from_records([{'old_index': i,'LEFT_FOOT_INDEX_y_site': df["LEFT_FOOT_INDEX_y_site"][i], 'LEFT_HEEL_y_site': df['LEFT_HEEL_y_site'][i]}])], ignore_index=True)
     # Funktion auf jede Reihe anwenden
+    
     dfObj["Klasse"] = dfObj.apply(lambda row: check_auftritt(row['LEFT_FOOT_INDEX_y_site'], row['LEFT_HEEL_y_site']), axis=1)
+    
+    # Zählen der verschiedenen Klassen
+    valuecount = dfObj['Klasse'].value_counts()
+    
+    # Dateiname extrahieren
+    video = x.split("/")
 
-    print("Für File", x, dfObj['Klasse'].value_counts())
+    # Neues Dataframe befüllen: Dateiname plus häufigste Klasse
+    dfresults = pd.concat([dfresults, pd.DataFrame.from_records([{'filename': video[1],'klasse': valuecount.idxmax()}])], ignore_index=True)
+
+
+
+print(dfresults)
