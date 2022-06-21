@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 # Einlesen einer csv-Datei aus evaluated_distances
 df = pd.read_csv(
-    "landmark_results_combined_new/7_Laufen_combined.csv"
+    "landmark_results_combined_new/4_Joggen_combined.csv"
 )
 
 # Liniendiagramm mit y-Achse Distanz rechte Hüfte - Knie und dessen Anomalieerkennungswerte(0 oder 1)
@@ -18,7 +18,7 @@ df = pd.read_csv(
 
 relevant_column = df["LEFT_FOOT_INDEX_y_site"]
 
-peaks = peakdetect(relevant_column, lookahead=15)
+peaks = peakdetect(relevant_column, lookahead=13)
 
 lowerPeaks = np.array(peaks[1])
 #indices = lowerPeaks[:,0]

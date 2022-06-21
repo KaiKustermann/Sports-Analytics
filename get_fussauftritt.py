@@ -31,8 +31,22 @@ for x in files:
 
     relevant_column = df["LEFT_HEEL_y_site"]
 
+    #Extrahieren der Geschwindigkeit aus Name der csv Datei
+    video = x.split("/")
+    video_splitted  = video[1]
+    z = video_splitted.split("_")
+    speed = z[1]
+
+    #Lookahead je nach Geschwindigkeit anpassen
+    if speed == "Joggen":
+        lookahead = 13
+    if speed == "Laufen":
+        lookahead = 13
+    if speed == "Gehen":
+        lookahead = 15
+
     #Analysieren der Peaks (High und Low)
-    peaks = peakdetect(relevant_column, lookahead=15)
+    peaks = peakdetect(relevant_column, lookahead=lookahead)
     # Lookahead is the distance to look ahead from a peak to determine if it is the actual peak. 
     # Change lookahead as necessary 
     #higherPeaks = np.array(peaks[0])
@@ -57,7 +71,6 @@ for x in files:
     # Zählen der verschiedenen Klassen
     valuecount = dfObj['Klasse'].value_counts()
     # Dateiname extrahieren
-    video = x.split("/")
 
     # Neues Dataframe befüllen: Dateiname plus häufigste Klasse
     dfresults = pd.concat([dfresults, pd.DataFrame.from_records([{'filename': video[1],'klasse': valuecount.idxmax()}])], ignore_index=True)
