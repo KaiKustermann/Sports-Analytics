@@ -6,7 +6,9 @@ import glob
 
 # Funktion um Fußauftritt einzuordnen
 def check_auftritt(fussspitze, ferse):
-        
+    # Werte auf zwei Nachkommastellen runden
+    fussspitze = round(fussspitze, 2)
+    ferse = round(ferse, 2)
     if fussspitze < ferse:
         return "Vorfußlauf"
     if fussspitze > ferse:
@@ -51,16 +53,14 @@ for x in files:
     # Funktion auf jede Reihe anwenden
     
     dfObj["Klasse"] = dfObj.apply(lambda row: check_auftritt(row['LEFT_FOOT_INDEX_y_site'], row['LEFT_HEEL_y_site']), axis=1)
-    
+
     # Zählen der verschiedenen Klassen
     valuecount = dfObj['Klasse'].value_counts()
-    
     # Dateiname extrahieren
     video = x.split("/")
 
     # Neues Dataframe befüllen: Dateiname plus häufigste Klasse
     dfresults = pd.concat([dfresults, pd.DataFrame.from_records([{'filename': video[1],'klasse': valuecount.idxmax()}])], ignore_index=True)
-
 
 
 print(dfresults)
