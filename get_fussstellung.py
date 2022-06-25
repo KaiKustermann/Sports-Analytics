@@ -3,11 +3,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import glob
+import statistics
 
 def check_class(value):
-    if value <= 175:
+    if value <= 165:
         return "Supination"
-    if value >= 185:
+    if value >= 175:
         return "Pronation"
     else:
         return "Neutral"
@@ -15,6 +16,9 @@ def check_class(value):
 files = []
 for file in glob.glob("landmark_results_combined_new/*.csv"):
     files.append(file)
+
+# Leerer Dataframe für Output
+dfresults = pd.DataFrame(columns=['filename', 'winkel', 'klasse'])
 
 for y in files:
 
@@ -43,14 +47,26 @@ for y in files:
     peaks = peakdetect(relevant_column, lookahead=lookahead)
 
     lowerPeaks = np.array(peaks[1])
-    indices = lowerPeaks[:,0]
+    # Dataframe Tiefpunkte mit Index erstellen
+    df_lowerpeaks = pd.DataFrame(lowerPeaks, columns = ['old_index','value'])
+    # Dataframe nach Tiefpunkten sortieren
+    sorted_df = df_lowerpeaks.sort_values(by=['value'], ignore_index=True)
+    # Median bestimmen
+    median = statistics.median_low(sorted_df["value"])
+    # Index des Medians bestimmen
+    index_median = sorted_df.index[sorted_df['value'] == median].tolist()
+    # Relevante Tiefpunkte (+/- 10 um Median) in Dataframe 
+    relevant_peaks = sorted_df.iloc[index_median[0] - 10 : index_median[0] + 10]
+    # Ursprüngliche Indizes in Liste zum iterieren
+    index_lowerPeaks = relevant_peaks['old_index'].tolist()
+
     mittelwert = []
     test_mw = 0
     count = 0
     #print(speed)
 
     # Alle Indizes der Tiefpunkte durchgehen
-    for i in indices:
+    for i in index_lowerPeaks:
         #print(i)
 
         # Liste für Anzahl extra Frames nach links und rechts machen
@@ -90,7 +106,7 @@ for y in files:
             mw_per_cyclus = mw_per_cyclus + np.degrees(angle2)
         
         angle_cyclus = (mw_per_cyclus / count_per_cyclus) 
-        print(angle_cyclus)   
+        #print(angle_cyclus)   
         #winkel = np.degrees(angle1)
         #mittelwert.append(np.degrees(angle1))
         test_mw = test_mw + np.degrees(angle1)
@@ -100,7 +116,13 @@ for y in files:
     print("Winkel: ", angle_file)
     checkup = check_class(angle_file)
     print("For file", y, "class:", checkup)
-    break
+    dfresults = pd.concat([dfresults, pd.DataFrame.from_records([{'filename': video[1], 'winkel': angle_file, 'klasse': checkup}])], ignore_index=True)
 
+
+
+print(dfresults)
+#Typisches Frame pro Video mit Winkel zeigen
+
+# Neuer Punkt y wert knie x wert knöchel, winkel zu richtigem vektor
 
 

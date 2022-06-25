@@ -13,8 +13,8 @@ df = pd.read_csv(
 # Um Z-Score hinzuzufügen: 1. In Datei evaluate_distances.py Zeile 63 (drop columns) auskommentieren, in Zeile 69 df_anomalien zu df ändern und Dateien generieren, Zielordner davor leeren.
 # 2. In Liste für y-Achse (diese Datei, Zeile 11) noch "z_rightkneehip" hinzufügen
 
-#fig1= px.line(df, x=df.index, y=['LEFT_FOOT_INDEX_y_site','LEFT_HEEL_y_site'], title='Anomalien Hüfte - Knie rechts')
-#fig1.show()
+fig1= px.line(df, x=df.index, y=['LEFT_FOOT_INDEX_x_back','LEFT_HEEL_x_back', 'LEFT_HEEL_y_site'], title='Anomalien Hüfte - Knie rechts')
+fig1.show()
 
 relevant_column = df["LEFT_FOOT_INDEX_y_site"]
 
@@ -23,6 +23,6 @@ peaks = peakdetect(relevant_column, lookahead=13)
 lowerPeaks = np.array(peaks[1])
 #indices = lowerPeaks[:,0]
 
-plt.plot(relevant_column)
-plt.plot(lowerPeaks[:,0], lowerPeaks[:,1], 'ko')
-plt.show()
+#plt.plot(relevant_column)
+#plt.plot(lowerPeaks[:,0], lowerPeaks[:,1], 'ko')
+#plt.show()

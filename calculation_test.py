@@ -9,7 +9,7 @@ df = pd.read_csv(
 )
 
 df=df.iloc[:, 1:]
-i = 99
+i = 16
 x = 0
 
 # Version 1
@@ -46,4 +46,20 @@ v1 = np.array(p2) - np.array(p1)
 
 angle = np.math.atan2(np.linalg.det([v0,v1]),np.dot(v0,v1))
 print(np.degrees(angle))
+
+
+
+
+b = np.array([df.LEFT_ANKLE_x_back[i], df.LEFT_ANKLE_y_back[i]])
+a = np.array([df.LEFT_KNEE_x_back[i], df.LEFT_KNEE_y_back[i]])
+c = np.array([df.LEFT_ANKLE_x_back[i], df.LEFT_KNEE_y_back[i]])
+
+ba = a - b
+bc = c - b
+
+cosine_angle1 = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
+angle1 = np.arccos(cosine_angle1)
+
+print(np.degrees(angle1))
+
     
