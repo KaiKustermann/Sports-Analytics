@@ -6,30 +6,30 @@ import glob
 import math
 import statistics
 
-def truncate(f, n):
-    return math.floor(f * 10 ** n) / 10 ** n
-
 # Funktion um Fußauftritt einzuordnen
 def check_auftritt(fussspitze, ferse):
-    # Werte auf zwei Nachkommastellen runden
-    fussspitze = truncate(fussspitze, 2)
-    ferse = truncate(ferse, 2)
-    if fussspitze < ferse:
+    # Differenz der Werte berechnen
+    change = get_change(fussspitze, ferse)
+    
+    # Wenn Differenz kleiner -0.04 Vorderfußlauf
+    if change < -0.02:
         return "Vorfußlauf"
-    if fussspitze > ferse:
+    # Wenn Differenz größer 0.04 Fersenlauf
+    if change > 0.02:
         return "Fersenlauf"
+    # Wenn zwischen -0.04 und 0.04 Mittelfußlauf
     else:
         return "Mittelfußlauf"
 
+# Funktion um Differenz zu berechnen
 def get_change(current, previous):
     if current == previous:
         return 0
     try:
-        return (abs(current - previous) / previous) * 100.0
+        return current - previous
     except ZeroDivisionError:
         return float('inf')
 
-# Prozentualen Unterschied zwischen beiden Werten -> WINKEL?????? Ferse und Fußspitze x und y Differenz
 
 # Alle csv-Dateien aus Ordner in Liste speichern
 files = []
@@ -41,6 +41,7 @@ dfresults = pd.DataFrame(columns=['filename', 'klasse_fußauftritt'])
 
 for x in files:
 
+    # Einlesen der Datei
     df = pd.read_csv(x)
     df = df.iloc[:, 1:]
 
@@ -88,21 +89,18 @@ for x in files:
 
     # Durch Indizes iterieren und für jeden Index in Liste den Wert Fußspitze und Ferse in den neuen DF speichern
     for i in index_lowerPeaks:
-        #new_df = df["LEFT_FOOT_INDEX_y_site"][i]
-        #dfObj = dfObj.append({'old_index': i,'LEFT_FOOT_INDEX_y_site': df["LEFT_FOOT_INDEX_y_site"][i], 'LEFT_HEEL_y_site': df['LEFT_HEEL_y_site'][i]}, ignore_index=True)
         dfObj = pd.concat([dfObj, pd.DataFrame.from_records([{'old_index': i,'LEFT_FOOT_INDEX_y_site': df["LEFT_FOOT_INDEX_y_site"][i], 'LEFT_HEEL_y_site': df['LEFT_HEEL_y_site'][i]}])], ignore_index=True)
+    
     # Funktion auf jede Reihe anwenden
-    #dfObj["Unterschied"] = dfObj.apply(lambda row: get_change(row['LEFT_HEEL_y_site'], row['LEFT_FOOT_INDEX_y_site']), axis=1)
-
     dfObj["Klasse"] = dfObj.apply(lambda row: check_auftritt(row['LEFT_FOOT_INDEX_y_site'], row['LEFT_HEEL_y_site']), axis=1)
+    
     # Zählen der verschiedenen Klassen
     valuecount = dfObj['Klasse'].value_counts()
 
     # Neues Dataframe befüllen: Dateiname plus häufigste Klasse
     dfresults = pd.concat([dfresults, pd.DataFrame.from_records([{'filename': z[0] + "_" + z[1],'klasse_fußauftritt': valuecount.idxmax()}])], ignore_index=True)
-    #print(dfObj.sort_values(by=['Unterschied']))
-# Median aller Tiefpunkte und 10 nach links und rechts
 
 print(dfresults)
-dfresults.to_csv("fussauftritt/" + "results.csv", index=False)
 
+# Speichern des Ergebnis-Dataframe in csv-Datei in Ordner Ergebnisse
+dfresults.to_csv("recommender/ergebnisse/" + "results_fussauftritt.csv", index=False)

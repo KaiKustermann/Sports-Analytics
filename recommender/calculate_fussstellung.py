@@ -5,10 +5,13 @@ import numpy as np
 import glob
 import statistics
 
+# Funktion, um berechneten Winkel einzuordnen
+# Genaue Werte wurden hier angepasst, um Abweichungen der Pose-Estimation auszugleichen.
+# 180 Grad sind NICHT realistisch als "Neutrale Fußstellung"
 def check_class(value):
-    if value <= 155:
+    if value <= 160:
         return "Supination"
-    if value >= 165:
+    if value >= 170:
         return "Pronation"
     else:
         return "Neutral"
@@ -18,10 +21,11 @@ for file in glob.glob("landmark_results_combined_new/*.csv"):
     files.append(file)
 
 # Leerer Dataframe für Output
-dfresults = pd.DataFrame(columns=['filename', 'winkel', 'klasse_fussstellung'])
+dfresults = pd.DataFrame(columns=['filename', 'klasse_fussstellung'])
 
 for y in files:
 
+    # Einlesen der Datei
     df = pd.read_csv(y)
     df = df.iloc[:, 1:]
 
@@ -36,16 +40,17 @@ for y in files:
     #Lookahead je nach Geschwindigkeit anpassen
     if speed == "Joggen":
         lookahead = 13
-        frame = 3
+        frame = 2
     if speed == "Laufen":
         lookahead = 13
-        frame = 2
+        frame = 1
     if speed == "Gehen":
         lookahead = 15
-        frame = 4
+        frame = 3
 
     peaks = peakdetect(relevant_column, lookahead=lookahead)
-
+    
+    # Tiefpunkte bestimmen
     lowerPeaks = np.array(peaks[1])
     # Dataframe Tiefpunkte mit Index erstellen
     df_lowerpeaks = pd.DataFrame(lowerPeaks, columns = ['old_index','value'])
@@ -63,7 +68,6 @@ for y in files:
     mittelwert = []
     test_mw = 0
     count = 0
-    #print(speed)
 
     # Alle Indizes der Tiefpunkte durchgehen
     for i in index_lowerPeaks:
@@ -89,7 +93,6 @@ for y in files:
             cosine_angle1 = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
             angle1 = np.arccos(cosine_angle1)
 
-            #print("Winkel1 von", i+x , np.degrees(angle1))
             mw_per_cyclus = mw_per_cyclus + np.degrees(angle1)
 
             b = np.array([df.LEFT_ANKLE_x_back[i-x], df.LEFT_ANKLE_y_back[i-x]])
@@ -102,29 +105,20 @@ for y in files:
             cosine_angle2 = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
             angle2 = np.arccos(cosine_angle2)
 
-            #print("Winkel1 von", i+x , np.degrees(angle1))
             mw_per_cyclus = mw_per_cyclus + np.degrees(angle2)
         
         angle_cyclus = (mw_per_cyclus / count_per_cyclus) 
-        #print(angle_cyclus)   
-        #winkel = np.degrees(angle1)
-        #mittelwert.append(np.degrees(angle1))
+
         test_mw = test_mw + np.degrees(angle1)
         count = count + 1
   
     angle_file = (test_mw / count)
-    print("Winkel: ", angle_file)
+    
     checkup = check_class(angle_file)
-    print("For file", y, "class:", checkup)
-    dfresults = pd.concat([dfresults, pd.DataFrame.from_records([{'filename': z[0] + "_" + z[1], 'winkel': angle_file, 'klasse_fussstellung': checkup}])], ignore_index=True)
 
-
+    dfresults = pd.concat([dfresults, pd.DataFrame.from_records([{'filename': z[0] + "_" + z[1], 'klasse_fussstellung': checkup}])], ignore_index=True)
 
 print(dfresults)
-dfresults.to_csv("fussauftritt/" + "results_fußstellung.csv", index=False)
 
-#Typisches Frame pro Video mit Winkel zeigen
-
-# Neuer Punkt y wert knie x wert knöchel, winkel zu richtigem vektor
-
-
+# Speichern des Ergebnis-Dataframe in csv-Datei in Ordner Ergebnisse
+dfresults.to_csv("recommender/ergebnisse/" + "results_fussstellung.csv", index=False)
