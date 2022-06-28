@@ -7,3 +7,5 @@ Folgender Ablauf um diesen zu nutzen:
 2. workflow.py ausführen, um Gelenkpunkte zu bestimmen
 3. In Ordner "recommender" Datei workflow_recommender.py ausführen
 4. Ergebnisse sind im Ordner "recommender/ergebnisse" zu finden
+
+Gruppe 2: Martina Rutsch, Kai Kustermann, Aleyna Özdal, Hannah Hielscher
