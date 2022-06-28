@@ -6,22 +6,24 @@ import glob
 import statistics
 
 # Funktion, um berechneten Winkel einzuordnen
-# 180 als neutraler Winkel
-def check_class(value):
-    if value <= 175:
+# Genaue Werte wurden hier angepasst, um Abweichungen der Pose-Estimation auszugleichen.
+# 180 Grad sind NICHT realistisch als "Neutrale Fußstellung"
+def check_class(value, angle):
+    if value <= angle - 5:
         return "Supination"
-    if value >= 185:
+    if value >= angle + 5:
         return "Pronation"
     else:
         return "Neutral"
 
-def calculate_fussstellung():
+def calculate_fussstellung_adjusted(angle):
+    angle = angle
     files = []
     for file in glob.glob("landmark_results_combined_new/*.csv"):
         files.append(file)
 
     # Leerer Dataframe für Output
-    dfresults = pd.DataFrame(columns=['filename', 'klasse_fussstellung'])
+    dfresults = pd.DataFrame(columns=['filename', 'klasse_fussstellung_newangle'])
 
     for y in files:
 
@@ -114,11 +116,11 @@ def calculate_fussstellung():
     
         angle_file = (test_mw / count)
         
-        checkup = check_class(angle_file)
+        checkup = check_class(angle_file, angle)
 
-        dfresults = pd.concat([dfresults, pd.DataFrame.from_records([{'filename': z[0] + "_" + z[1], 'klasse_fussstellung': checkup}])], ignore_index=True)
+        dfresults = pd.concat([dfresults, pd.DataFrame.from_records([{'filename': z[0] + "_" + z[1], 'klasse_fussstellung_newangle': checkup}])], ignore_index=True)
 
     print(dfresults)
 
     # Speichern des Ergebnis-Dataframe in csv-Datei in Ordner Ergebnisse
-    dfresults.to_csv("recommender/ergebnisse/" + "results_fussstellung.csv", index=False)
+    dfresults.to_csv("recommender/ergebnisse/" + "results_fussstellung_adjusted.csv", index=False)
