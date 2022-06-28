@@ -11,13 +11,13 @@ def check_auftritt(fussspitze, ferse):
     # Differenz der Werte berechnen
     change = get_change(fussspitze, ferse)
     
-    # Wenn Differenz kleiner -0.04 Vorderfußlauf
+    # Wenn Differenz kleiner -0.02 Vorderfußlauf
     if change < -0.02:
         return "Vorfußlauf"
-    # Wenn Differenz größer 0.04 Fersenlauf
+    # Wenn Differenz größer 0.02 Fersenlauf
     if change > 0.02:
         return "Fersenlauf"
-    # Wenn zwischen -0.04 und 0.04 Mittelfußlauf
+    # Wenn zwischen -0.02 und 0.02 Mittelfußlauf
     else:
         return "Mittelfußlauf"
 
